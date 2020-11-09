@@ -10,7 +10,7 @@
     <xacro:property name="wheel_r_size" value="0.075" />
     <xacro:property name="wheel_w_size" value="0.02" />
     <xacro:property name="wheel_y_shift" value="0.03" />
-    <xacro:property name="ball_size" value="0.005" />
+    <xacro:property name="ball_size" value="0.0048" />
     <xacro:property name="ball_shift" value="0.1" />
 
     <link name="base_footprint" >
@@ -74,12 +74,6 @@
             <robotNamespace>/gunrobo</robotNamespace>
             <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
             <legacyModeNS>true</legacyModeNS>
-        </plugin>
-        <plugin name="ground_truth" filename="libgazebo_ros_p3d.so">
-            <frameName>map</frameName>
-            <bodyName>base_footprint</bodyName>
-            <topicName>/tracker</topicName>
-            <updateRate>10.0</updateRate>
         </plugin>
     </gazebo>
 </robot>

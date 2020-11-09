@@ -52,8 +52,8 @@
 
         <gazebo reference="${wheel_link}">
             <material>Gazebo/Red</material>
-            <mu1>0.05</mu1>
-            <mu2>0.05</mu2>
+            <mu1>0.75</mu1>
+            <mu2>0.75</mu2>
         </gazebo>
     </xacro:macro>
 </robot>
