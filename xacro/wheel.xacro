@@ -30,7 +30,7 @@
                 </geometry>
             </collision>
             <inertial>
-                <xacro:property name="mass" value="0.1" />
+                <xacro:property name="mass" value="1" />
                 <xacro:property name="inertia_ixx" value="${mass*r_size*r_size/4 + mass*w_size*w_size/12}" />
                 <xacro:property name="inertia_izz" value="${mass*r_size*r_size/2}" />
                 <mass value="${mass}"/>
@@ -52,8 +52,8 @@
 
         <gazebo reference="${wheel_link}">
             <material>Gazebo/Red</material>
-            <mu1>0.75</mu1>
-            <mu2>0.75</mu2>
+            <mu1>0.9</mu1>
+            <mu2>0.9</mu2>
         </gazebo>
     </xacro:macro>
 </robot>
