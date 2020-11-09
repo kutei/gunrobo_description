@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <arg name="robot_name" default="gunrobo" />
+
+    <!-- robot description -->
+    <arg name="robot_model_path" default="$(find gunrobo_description)/xacro/$(arg robot_name).xacro" />
+    <param name="robot_description" command="$(find xacro)/xacro $(arg robot_model_path)" />
+
+    <!-- launch joints -->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+    <!-- launch rivz for visualize -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find gunrobo_description)/rviz/display_robot.rviz" />
+</launch>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot name="gunrobo" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!-- インクルード -->
+    <xacro:include filename="$(find gunrobo_description)/xacro/wheel.xacro"/>
+    <xacro:include filename="$(find gunrobo_description)/xacro/free_ball.xacro"/>
+
+    <!-- ロボットサイズの定義 -->
+    <xacro:property name="w_size" value="0.25" />
+    <xacro:property name="lift_up" value="0.01" />
+    <xacro:property name="wheel_r_size" value="0.075" />
+    <xacro:property name="wheel_w_size" value="0.02" />
+    <xacro:property name="wheel_y_shift" value="0.03" />
+    <xacro:property name="ball_size" value="0.005" />
+    <xacro:property name="ball_shift" value="0.1" />
+
+    <link name="base_footprint" >
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+    </link>
+
+    <joint name="footprint_to_base" type="fixed">
+        <parent link="base_footprint" />
+        <child link="base_link" />
+        <origin xyz="0 0 0.135" rpy="0 0 0" />
+    </joint>
+
+    <!-- body -->
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size="${w_size} ${w_size} ${w_size}" />
+            </geometry>
+            <material name="gray">
+                <color rgba="0.5 0.5 0.5 2.5"/>
+            </material>
+        </visual>
+        <inertial>
+            <xacro:property name="mass" value="0.1" />
+            <xacro:property name="inertia_sphere" value="${mass*w_size*w_size/5}" />
+            <mass value="${mass}"/>
+            <inertia ixx="${inertia_sphere}" ixy="0" ixz="0"
+                iyy="${inertia_sphere}" iyz="0"
+                izz="${inertia_sphere}"/>
+        </inertial>
+        <gazebo reference="base_link">
+            <material>Gazebo/Gray</material>
+        </gazebo>
+    </link>
+
+    <!-- wheels -->
+    <xacro:wheel prefix="left" parent="base_link" r_size="${wheel_r_size}" w_size="${wheel_w_size}">
+        <origin
+            xyz="0.0 ${w_size / 2 + wheel_y_shift} ${- w_size / 2 + wheel_r_size - lift_up}"
+            rpy="${pi/2} 0.0 0.0" />
+        <axis xyz="0.0 0.0 1.0" />
+    </xacro:wheel>
+    <xacro:wheel prefix="right" parent="base_link" r_size="${wheel_r_size}" w_size="${wheel_w_size}">
+        <origin
+            xyz="0.0 ${- w_size / 2 - wheel_y_shift} ${- w_size / 2 + wheel_r_size - lift_up}"
+            rpy="${-pi/2} 0.0 0.0" />
+        <axis xyz="0.0 0.0 1.0" />
+    </xacro:wheel>
+
+    <!-- ball -->
+    <xacro:free_ball prefix="front" parent="base_link" r_size="${ball_size}">
+        <origin xyz="${ball_shift} 0.0 ${- w_size / 2 - ball_size}" />
+    </xacro:free_ball>
+    <xacro:free_ball prefix="rear" parent="base_link" r_size="${ball_size}">
+        <origin xyz="${-ball_shift} 0.0 ${- w_size / 2 - ball_size}" />
+    </xacro:free_ball>
+
+    <!-- gazebo plugin -->
+    <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotNamespace>/gunrobo</robotNamespace>
+            <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+            <legacyModeNS>true</legacyModeNS>
+        </plugin>
+        <plugin name="ground_truth" filename="libgazebo_ros_p3d.so">
+            <frameName>map</frameName>
+            <bodyName>base_footprint</bodyName>
+            <topicName>/tracker</topicName>
+            <updateRate>10.0</updateRate>
+        </plugin>
+    </gazebo>
+</robot>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="free_ball" params="prefix parent r_size *joint_origin">
+        <xacro:property name="free_ball_link" value="${prefix}_free_ball" />
+        <xacro:property name="free_ball_joint" value="${prefix}_free_ball_joint" />
+
+        <joint name="${free_ball_joint}" type="fixed">
+            <parent link="${parent}" />
+            <child link="${free_ball_link}" />
+            <xacro:insert_block name="joint_origin" />
+        </joint>
+
+        <link name="${free_ball_link}">
+            <visual>
+                <geometry>
+                    <sphere radius="${r_size}" />
+                </geometry>
+                <material name="red">
+                    <color rgba="1.0 0.0 0.0 2.5"/>
+                </material>
+            </visual>
+            <collision>
+                <geometry>
+                    <sphere radius="${r_size}" />
+                </geometry>
+            </collision>
+            <inertial>
+                <xacro:property name="mass" value="0.01" />
+                <xacro:property name="inertia_ixx" value="${mass*r_size*r_size/5}" />
+                <mass value="${mass}"/>
+                <inertia ixx="${inertia_ixx}" ixy="0" ixz="0"
+                    iyy="${inertia_ixx}" iyz="0"
+                    izz="${inertia_ixx}"/>
+            </inertial>
+        </link>
+
+        <gazebo reference="${free_ball_link}">
+            <material>Gazebo/Red</material>
+            <mu1>0.0</mu1>
+            <mu2>0.0</mu2>
+        </gazebo>
+    </xacro:macro>
+</robot>
