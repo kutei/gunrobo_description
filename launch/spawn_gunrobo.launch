@@ -15,9 +15,12 @@
         args="-param robot_description -urdf -model $(arg robot_name) -z 0.5" />
 
     <!-- gazebo plugin load -->
-    <rosparam command="load" file="$(find gunrobo_description)/config/$(arg robot_name)_control.yaml"
+    <rosparam command="load" file="$(find gunrobo_description)/config/joint_state_controller.yaml"
+        ns="/$(arg robot_name)" />
+    <rosparam command="load" file="$(find gunrobo_description)/config/$(arg robot_name)_controller.yaml"
         ns="/$(arg robot_name)" />
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-        output="screen" ns="/$(arg robot_name)" args="gunrobo_controller" />
+        output="screen" ns="/$(arg robot_name)"
+        args="gunrobo_controller joint_state_controller" />
 
 </launch>
